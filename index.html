@@ -644,6 +644,80 @@ a{
 
 
 /* =========================================================
+   OTP VERIFICATION
+   ========================================================= */
+
+.otp-box{
+  display:none;
+  margin-top:5px;
+}
+
+.otp-box.show{
+  display:block;
+}
+
+.otp-title{
+  text-align:center;
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:8px;
+}
+
+.otp-text{
+  text-align:center;
+  color:#8993a3;
+  font-size:13px;
+  line-height:1.6;
+  margin-bottom:18px;
+}
+
+.otp-input{
+  width:100%;
+  background:#080c13;
+  color:#fff;
+  border:1px solid rgba(183,255,60,.35);
+  border-radius:12px;
+  padding:15px;
+  outline:none;
+  text-align:center;
+  font-size:26px;
+  font-weight:800;
+  letter-spacing:9px;
+}
+
+.otp-input:focus{
+  border-color:#b7ff3c;
+}
+
+.otp-actions{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
+
+.otp-actions .btn{
+  flex:1;
+}
+
+.otp-resend{
+  width:100%;
+  margin-top:12px;
+  background:none;
+  border:0;
+  color:#b7ff3c;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.otp-message{
+  text-align:center;
+  font-size:13px;
+  line-height:1.5;
+  margin-top:12px;
+}
+
+
+/* =========================================================
    FOOTER
    ========================================================= */
 
@@ -753,6 +827,11 @@ footer strong{
 
   .section-head{
     display:block;
+  }
+
+  .otp-input{
+    font-size:22px;
+    letter-spacing:6px;
   }
 
 }
@@ -1300,6 +1379,8 @@ footer strong{
     </div>
 
 
+    <!-- LOGIN / SIGNUP -->
+
     <form id="authForm">
 
       <div class="form-grid">
@@ -1319,7 +1400,9 @@ footer strong{
         </div>
 
 
-        <div class="form-group full">
+        <div
+          class="form-group full"
+          id="passwordGroup">
 
           <label>
             Password
@@ -1372,7 +1455,86 @@ footer strong{
     </form>
 
 
-    <div class="auth-switch">
+    <!-- OTP BOX -->
+
+    <div
+      class="otp-box"
+      id="otpBox">
+
+      <div class="otp-title">
+        Verify Your Email
+      </div>
+
+      <div class="otp-text">
+
+        We sent a 6-digit verification code to
+
+        <strong
+          id="otpEmailDisplay"
+          style="color:#b7ff3c;">
+        </strong>
+
+      </div>
+
+
+      <input
+        type="text"
+        id="otpInput"
+        class="otp-input"
+        placeholder="000000"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+        maxlength="6">
+
+
+      <div
+        id="otpMessage"
+        class="otp-message">
+      </div>
+
+
+      <div class="otp-actions">
+
+        <button
+          type="button"
+          class="btn btn-dark"
+          onclick="backToAuth()">
+
+          Back
+
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-green"
+          id="verifyOtpBtn"
+          onclick="verifyEmailOTP()">
+
+          Verify OTP
+
+        </button>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="otp-resend"
+        id="resendOtpBtn"
+        onclick="resendOTP()">
+
+        Didn't receive the code? Resend OTP
+
+      </button>
+
+    </div>
+
+
+    <!-- AUTH SWITCH -->
+
+    <div
+      class="auth-switch"
+      id="authSwitch">
 
       <span id="authSwitchText">
         Don't have an account?
@@ -1456,6 +1618,10 @@ let searchTerm = "";
 
 let authMode = "login";
 
+let otpEmail = "";
+
+let otpMode = false;
+
 
 /* =========================================================
    BUSINESS MODAL
@@ -1509,6 +1675,22 @@ function openAuthModal(mode = "login"){
 
   authMode = mode;
 
+  otpMode = false;
+
+  otpEmail = "";
+
+  document
+    .getElementById("otpBox")
+    .classList.remove("show");
+
+  document
+    .getElementById("authForm")
+    .style.display = "";
+
+  document
+    .getElementById("authSwitch")
+    .style.display = "";
+
   updateAuthUI();
 
   document
@@ -1528,10 +1710,32 @@ function closeAuthModal(){
 
   document.body.style.overflow = "";
 
+  otpMode = false;
+
+  otpEmail = "";
+
+  document
+    .getElementById("otpBox")
+    .classList.remove("show");
+
+  document
+    .getElementById("authForm")
+    .style.display = "";
+
+  document
+    .getElementById("authSwitch")
+    .style.display = "";
+
 }
 
 
 function toggleAuthMode(){
+
+  if(otpMode){
+
+    return;
+
+  }
 
   authMode =
     authMode === "login"
@@ -1559,6 +1763,13 @@ function updateAuthUI(){
 
   const message =
     document.getElementById("authMessage");
+
+
+  if(otpMode){
+
+    return;
+
+  }
 
 
   message.textContent = "";
@@ -1616,7 +1827,8 @@ document
         document
           .getElementById("authEmail")
           .value
-          .trim();
+          .trim()
+          .toLowerCase();
 
       const password =
         document
@@ -1646,7 +1858,24 @@ document
       }
 
 
+      if(
+        authMode === "signup" &&
+        password.length < 6
+      ){
+
+        message.textContent =
+          "Password must be at least 6 characters.";
+
+        message.style.color =
+          "#ff7b7b";
+
+        return;
+
+      }
+
+
       button.disabled = true;
+
 
       button.textContent =
         authMode === "login"
@@ -1655,6 +1884,10 @@ document
 
 
       try{
+
+        /* =================================================
+           LOGIN
+           ================================================= */
 
         if(authMode === "login"){
 
@@ -1684,49 +1917,57 @@ document
 
           updateAuthButton();
 
+          return;
+
+        }
+
+
+        /* =================================================
+           SIGN UP
+           ================================================= */
+
+        const {
+          data,
+          error
+        } =
+        await supabaseClient
+          .auth
+          .signUp({
+            email,
+            password
+          });
+
+
+        if(error){
+
+          throw error;
+
+        }
+
+
+        /* =================================================
+           OTP REQUIRED
+           ================================================= */
+
+        if(!data.session){
+
+          otpEmail = email;
+
+          showOTPBox();
+
+          showToast(
+            "📩 6-digit OTP sent to your email."
+          );
+
         }else{
 
-          const {
-            data,
-            error
-          } =
-          await supabaseClient
-            .auth
-            .signUp({
-  email,
-  password,
-  options: {
-    emailRedirectTo: window.location.origin + window.location.pathname
-  }
-});
+          showToast(
+            "✅ Account created successfully!"
+          );
 
+          closeAuthModal();
 
-          if(error){
-
-            throw error;
-
-          }
-
-
-          if(data.session){
-
-            showToast(
-              "✅ Account created successfully!"
-            );
-
-            closeAuthModal();
-
-            updateAuthButton();
-
-          }else{
-
-            message.textContent =
-              "✅ Account created. Please check your email and confirm your account before logging in.";
-
-            message.style.color =
-              "#b7ff3c";
-
-          }
+          updateAuthButton();
 
         }
 
@@ -1758,6 +1999,350 @@ document
             : "Sign Up";
 
       }
+
+    }
+  );
+
+
+/* =========================================================
+   SHOW OTP BOX
+   ========================================================= */
+
+function showOTPBox(){
+
+  otpMode = true;
+
+
+  document
+    .getElementById("authForm")
+    .style.display = "none";
+
+
+  document
+    .getElementById("authSwitch")
+    .style.display = "none";
+
+
+  document
+    .getElementById("otpBox")
+    .classList.add("show");
+
+
+  document
+    .getElementById("authTitle")
+    .textContent =
+    "Email Verification";
+
+
+  document
+    .getElementById("otpEmailDisplay")
+    .textContent =
+    otpEmail;
+
+
+  document
+    .getElementById("otpInput")
+    .value = "";
+
+
+  document
+    .getElementById("otpMessage")
+    .textContent = "";
+
+
+  setTimeout(function(){
+
+    document
+      .getElementById("otpInput")
+      .focus();
+
+  },100);
+
+}
+
+
+/* =========================================================
+   VERIFY OTP
+   ========================================================= */
+
+async function verifyEmailOTP(){
+
+  const input =
+    document.getElementById("otpInput");
+
+  const button =
+    document.getElementById("verifyOtpBtn");
+
+  const message =
+    document.getElementById("otpMessage");
+
+
+  const token =
+    input.value
+      .trim()
+      .replace(/\D/g,"");
+
+
+  if(token.length !== 6){
+
+    message.textContent =
+      "Please enter the 6-digit OTP.";
+
+    message.style.color =
+      "#ff7b7b";
+
+    return;
+
+  }
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "Verifying...";
+
+  message.textContent = "";
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .auth
+      .verifyOtp({
+        email: otpEmail,
+        token: token,
+        type: "email"
+      });
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+    if(!data.session){
+
+      throw new Error(
+        "Verification completed, but no login session was created."
+      );
+
+    }
+
+
+    message.textContent =
+      "✅ Email verified successfully!";
+
+    message.style.color =
+      "#b7ff3c";
+
+
+    showToast(
+      "✅ Email verified! You are now logged in."
+    );
+
+
+    setTimeout(function(){
+
+      closeAuthModal();
+
+      updateAuthButton();
+
+    },700);
+
+
+  }catch(error){
+
+    console.error(
+      "OTP verification error:",
+      error
+    );
+
+
+    message.textContent =
+      error.message ||
+      "Invalid or expired OTP.";
+
+    message.style.color =
+      "#ff7b7b";
+
+
+  }finally{
+
+    button.disabled = false;
+
+    button.textContent =
+      "Verify OTP";
+
+  }
+
+}
+
+
+/* =========================================================
+   RESEND OTP
+   ========================================================= */
+
+async function resendOTP(){
+
+  const button =
+    document.getElementById(
+      "resendOtpBtn"
+    );
+
+  const message =
+    document.getElementById(
+      "otpMessage"
+    );
+
+
+  if(!otpEmail){
+
+    message.textContent =
+      "Email address is missing.";
+
+    message.style.color =
+      "#ff7b7b";
+
+    return;
+
+  }
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "Sending OTP...";
+
+
+  try{
+
+    const {
+      error
+    } =
+    await supabaseClient
+      .auth
+      .resend({
+        type: "signup",
+        email: otpEmail
+      });
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+    message.textContent =
+      "✅ A new OTP has been sent.";
+
+    message.style.color =
+      "#b7ff3c";
+
+
+    showToast(
+      "📩 New OTP sent."
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Resend OTP error:",
+      error
+    );
+
+
+    message.textContent =
+      error.message ||
+      "Unable to resend OTP.";
+
+    message.style.color =
+      "#ff7b7b";
+
+
+  }finally{
+
+    button.disabled = false;
+
+    button.textContent =
+      "Didn't receive the code? Resend OTP";
+
+  }
+
+}
+
+
+/* =========================================================
+   BACK TO AUTH
+   ========================================================= */
+
+function backToAuth(){
+
+  otpMode = false;
+
+  otpEmail = "";
+
+
+  document
+    .getElementById("otpBox")
+    .classList.remove("show");
+
+
+  document
+    .getElementById("authForm")
+    .style.display = "";
+
+
+  document
+    .getElementById("authSwitch")
+    .style.display = "";
+
+
+  document
+    .getElementById("authTitle")
+    .textContent =
+    authMode === "login"
+      ? "Login"
+      : "Create Account";
+
+
+  document
+    .getElementById("otpInput")
+    .value = "";
+
+
+  document
+    .getElementById("otpMessage")
+    .textContent = "";
+
+
+  updateAuthUI();
+
+}
+
+
+/* =========================================================
+   OTP INPUT
+   ========================================================= */
+
+document
+  .getElementById("otpInput")
+  .addEventListener(
+    "input",
+    function(){
+
+      this.value =
+        this.value
+          .replace(/\D/g,"")
+          .slice(0,6);
 
     }
   );
@@ -2945,4 +3530,4 @@ loadBusinesses();
 </script>
 
 </body>
-  </html>
+          </html>
