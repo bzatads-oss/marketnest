@@ -3,7 +3,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>MarketNest — Discover Local Businesses</title>
@@ -34,16 +33,8 @@ html{
 body{
   font-family:Arial,Helvetica,sans-serif;
   background:
-    radial-gradient(
-      circle at top left,
-      #17251f 0%,
-      transparent 35%
-    ),
-    radial-gradient(
-      circle at top right,
-      #101c31 0%,
-      transparent 35%
-    ),
+    radial-gradient(circle at top left,#17251f 0%,transparent 35%),
+    radial-gradient(circle at top right,#101c31 0%,transparent 35%),
     #05070b;
   color:#fff;
   min-height:100vh;
@@ -105,7 +96,7 @@ a{
 .nav-right{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:10px;
 }
 
 
@@ -123,6 +114,12 @@ a{
 
 .btn:hover{
   transform:translateY(-1px);
+}
+
+.btn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+  transform:none;
 }
 
 .btn-green{
@@ -610,6 +607,43 @@ a{
 
 
 /* =========================================================
+   AUTH
+   ========================================================= */
+
+.auth-status{
+  color:#b7ff3c;
+  font-size:11px;
+  margin-top:3px;
+  max-width:150px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.auth-switch{
+  text-align:center;
+  margin-top:18px;
+  color:#8993a3;
+  font-size:13px;
+}
+
+.auth-switch button{
+  background:none;
+  border:0;
+  color:#b7ff3c;
+  font-weight:700;
+  cursor:pointer;
+  margin-left:5px;
+}
+
+.auth-message{
+  font-size:13px;
+  line-height:1.5;
+  text-align:center;
+}
+
+
+/* =========================================================
    FOOTER
    ========================================================= */
 
@@ -679,9 +713,13 @@ footer strong{
     font-size:21px;
   }
 
+  .nav-right{
+    gap:6px;
+  }
+
   .nav-right .btn{
-    padding:9px 12px;
-    font-size:12px;
+    padding:9px 10px;
+    font-size:11px;
   }
 
   .hero{
@@ -723,7 +761,6 @@ footer strong{
 
 </head>
 
-
 <body>
 
 
@@ -740,6 +777,15 @@ footer strong{
     </div>
 
     <div class="nav-right">
+
+      <button
+        class="btn btn-dark"
+        id="authButton"
+        onclick="openAuthModal()">
+
+        🔐 Login
+
+      </button>
 
       <button
         class="btn btn-green"
@@ -777,7 +823,6 @@ footer strong{
       Discover businesses, shops, services and brands
       around your city — all in one place.
     </p>
-
 
     <div class="search-box">
 
@@ -823,70 +868,52 @@ footer strong{
     </div>
 
 
-    <!-- FILTERS -->
-
     <div class="filters">
 
       <button
         class="filter active"
         data-category="All">
-
         All
-
       </button>
 
       <button
         class="filter"
         data-category="Food">
-
         Food
-
       </button>
 
       <button
         class="filter"
         data-category="Technology">
-
         Technology
-
       </button>
 
       <button
         class="filter"
         data-category="Services">
-
         Services
-
       </button>
 
       <button
         class="filter"
         data-category="Retail">
-
         Retail
-
       </button>
 
       <button
         class="filter"
         data-category="Beauty">
-
         Beauty
-
       </button>
 
       <button
         class="filter"
         data-category="Education">
-
         Education
-
       </button>
 
     </div>
 
-
-    <!-- BUSINESS GRID -->
 
     <div
       class="grid"
@@ -960,7 +987,6 @@ footer strong{
 
     <div class="steps">
 
-
       <div class="step">
 
         <div class="step-number">
@@ -1014,7 +1040,6 @@ footer strong{
 
       </div>
 
-
     </div>
 
   </div>
@@ -1030,9 +1055,7 @@ footer strong{
   class="modal"
   id="businessModal">
 
-
   <div class="modal-box">
-
 
     <div class="modal-head">
 
@@ -1043,9 +1066,7 @@ footer strong{
       <button
         class="close"
         onclick="closeModal()">
-
         ×
-
       </button>
 
     </div>
@@ -1055,11 +1076,7 @@ footer strong{
       id="businessForm"
       novalidate>
 
-
       <div class="form-grid">
-
-
-        <!-- BUSINESS NAME -->
 
         <div class="form-group full">
 
@@ -1075,8 +1092,6 @@ footer strong{
 
         </div>
 
-
-        <!-- CATEGORY -->
 
         <div class="form-group">
 
@@ -1121,8 +1136,6 @@ footer strong{
         </div>
 
 
-        <!-- CITY AREA -->
-
         <div class="form-group">
 
           <label>
@@ -1138,8 +1151,6 @@ footer strong{
         </div>
 
 
-        <!-- PHONE -->
-
         <div class="form-group">
 
           <label>
@@ -1153,8 +1164,6 @@ footer strong{
 
         </div>
 
-
-        <!-- WEBSITE -->
 
         <div class="form-group">
 
@@ -1170,14 +1179,11 @@ footer strong{
         </div>
 
 
-        <!-- LOGO -->
-
         <div class="form-group full">
 
           <label>
             📷 Business Logo
           </label>
-
 
           <div class="logo-upload">
 
@@ -1186,7 +1192,6 @@ footer strong{
               id="businessLogo"
               name="businessLogo"
               accept="image/png,image/jpeg,image/webp">
-
 
             <div
               class="logo-preview"
@@ -1198,7 +1203,6 @@ footer strong{
                 alt="Logo preview">
 
             </div>
-
 
             <div
               class="form-note"
@@ -1213,8 +1217,6 @@ footer strong{
         </div>
 
 
-        <!-- DESCRIPTION -->
-
         <div class="form-group full">
 
           <label>
@@ -1228,8 +1230,6 @@ footer strong{
         </div>
 
 
-        <!-- NOTE -->
-
         <div class="form-group full">
 
           <div class="form-note">
@@ -1242,8 +1242,6 @@ footer strong{
         </div>
 
 
-        <!-- ACTIONS -->
-
         <div class="form-actions">
 
           <button
@@ -1254,7 +1252,6 @@ footer strong{
             Cancel
 
           </button>
-
 
           <button
             type="submit"
@@ -1267,10 +1264,130 @@ footer strong{
 
         </div>
 
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     AUTH MODAL
+     ========================================================= -->
+
+<div
+  class="modal"
+  id="authModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h2 id="authTitle">
+        Login
+      </h2>
+
+      <button
+        class="close"
+        onclick="closeAuthModal()">
+
+        ×
+
+      </button>
+
+    </div>
+
+
+    <form id="authForm">
+
+      <div class="form-grid">
+
+        <div class="form-group full">
+
+          <label>
+            Email
+          </label>
+
+          <input
+            type="email"
+            id="authEmail"
+            placeholder="you@example.com"
+            required>
+
+        </div>
+
+
+        <div class="form-group full">
+
+          <label>
+            Password
+          </label>
+
+          <input
+            type="password"
+            id="authPassword"
+            placeholder="Minimum 6 characters"
+            minlength="6"
+            required>
+
+        </div>
+
+
+        <div class="form-group full">
+
+          <div
+            id="authMessage"
+            class="auth-message">
+          </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+          <button
+            type="button"
+            class="btn btn-dark"
+            onclick="closeAuthModal()">
+
+            Cancel
+
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-green"
+            id="authSubmitBtn">
+
+            Login
+
+          </button>
+
+        </div>
 
       </div>
 
     </form>
+
+
+    <div class="auth-switch">
+
+      <span id="authSwitchText">
+        Don't have an account?
+      </span>
+
+      <button
+        type="button"
+        id="authSwitchBtn"
+        onclick="toggleAuthMode()">
+
+        Sign Up
+
+      </button>
+
+    </div>
 
   </div>
 
@@ -1310,7 +1427,6 @@ footer strong{
 
 <script>
 
-
 /* =========================================================
    SUPABASE CONFIG
    ========================================================= */
@@ -1318,10 +1434,8 @@ footer strong{
 const SUPABASE_URL =
   "https://fdsmenymbwbllkswqquj.supabase.co";
 
-
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_LRz9It_FBRlMqiJE1XgiZw_ykPcohN_";
-
 
 const supabaseClient =
   window.supabase.createClient(
@@ -1340,18 +1454,38 @@ let currentCategory = "All";
 
 let searchTerm = "";
 
+let authMode = "login";
+
 
 /* =========================================================
-   MODAL
+   BUSINESS MODAL
    ========================================================= */
 
 function openModal(){
 
-  document
-    .getElementById("businessModal")
-    .classList.add("show");
+  supabaseClient.auth
+    .getSession()
+    .then(function(result){
 
-  document.body.style.overflow = "hidden";
+      if(!result.data.session){
+
+        showToast(
+          "🔐 Please login first to list your business."
+        );
+
+        openAuthModal("login");
+
+        return;
+
+      }
+
+      document
+        .getElementById("businessModal")
+        .classList.add("show");
+
+      document.body.style.overflow = "hidden";
+
+    });
 
 }
 
@@ -1368,7 +1502,372 @@ function closeModal(){
 
 
 /* =========================================================
-   CLOSE MODAL OUTSIDE
+   AUTH MODAL
+   ========================================================= */
+
+function openAuthModal(mode = "login"){
+
+  authMode = mode;
+
+  updateAuthUI();
+
+  document
+    .getElementById("authModal")
+    .classList.add("show");
+
+  document.body.style.overflow = "hidden";
+
+}
+
+
+function closeAuthModal(){
+
+  document
+    .getElementById("authModal")
+    .classList.remove("show");
+
+  document.body.style.overflow = "";
+
+}
+
+
+function toggleAuthMode(){
+
+  authMode =
+    authMode === "login"
+      ? "signup"
+      : "login";
+
+  updateAuthUI();
+
+}
+
+
+function updateAuthUI(){
+
+  const title =
+    document.getElementById("authTitle");
+
+  const button =
+    document.getElementById("authSubmitBtn");
+
+  const switchText =
+    document.getElementById("authSwitchText");
+
+  const switchButton =
+    document.getElementById("authSwitchBtn");
+
+  const message =
+    document.getElementById("authMessage");
+
+
+  message.textContent = "";
+
+  message.style.color = "";
+
+
+  if(authMode === "login"){
+
+    title.textContent =
+      "Login";
+
+    button.textContent =
+      "Login";
+
+    switchText.textContent =
+      "Don't have an account?";
+
+    switchButton.textContent =
+      "Sign Up";
+
+  }else{
+
+    title.textContent =
+      "Create Account";
+
+    button.textContent =
+      "Sign Up";
+
+    switchText.textContent =
+      "Already have an account?";
+
+    switchButton.textContent =
+      "Login";
+
+  }
+
+}
+
+
+/* =========================================================
+   AUTH FORM
+   ========================================================= */
+
+document
+  .getElementById("authForm")
+  .addEventListener(
+    "submit",
+    async function(e){
+
+      e.preventDefault();
+
+
+      const email =
+        document
+          .getElementById("authEmail")
+          .value
+          .trim();
+
+      const password =
+        document
+          .getElementById("authPassword")
+          .value;
+
+
+      const button =
+        document
+          .getElementById("authSubmitBtn");
+
+      const message =
+        document
+          .getElementById("authMessage");
+
+
+      if(!email || !password){
+
+        message.textContent =
+          "Please enter email and password.";
+
+        message.style.color =
+          "#ff7b7b";
+
+        return;
+
+      }
+
+
+      button.disabled = true;
+
+      button.textContent =
+        authMode === "login"
+          ? "Logging in..."
+          : "Creating account...";
+
+
+      try{
+
+        if(authMode === "login"){
+
+          const {
+            error
+          } =
+          await supabaseClient
+            .auth
+            .signInWithPassword({
+              email,
+              password
+            });
+
+
+          if(error){
+
+            throw error;
+
+          }
+
+
+          showToast(
+            "✅ Login successful!"
+          );
+
+          closeAuthModal();
+
+          updateAuthButton();
+
+        }else{
+
+          const {
+            data,
+            error
+          } =
+          await supabaseClient
+            .auth
+            .signUp({
+              email,
+              password
+            });
+
+
+          if(error){
+
+            throw error;
+
+          }
+
+
+          if(data.session){
+
+            showToast(
+              "✅ Account created successfully!"
+            );
+
+            closeAuthModal();
+
+            updateAuthButton();
+
+          }else{
+
+            message.textContent =
+              "✅ Account created. Please check your email and confirm your account before logging in.";
+
+            message.style.color =
+              "#b7ff3c";
+
+          }
+
+        }
+
+
+      }catch(error){
+
+        console.error(
+          "Auth error:",
+          error
+        );
+
+
+        message.textContent =
+          error.message ||
+          "Authentication failed.";
+
+        message.style.color =
+          "#ff7b7b";
+
+
+      }finally{
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          authMode === "login"
+            ? "Login"
+            : "Sign Up";
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   AUTH BUTTON
+   ========================================================= */
+
+async function updateAuthButton(){
+
+  const button =
+    document.getElementById(
+      "authButton"
+    );
+
+
+  if(!button){
+
+    return;
+
+  }
+
+
+  const {
+    data: {
+      session
+    }
+  } =
+  await supabaseClient
+    .auth
+    .getSession();
+
+
+  if(session){
+
+    button.textContent =
+      "🚪 Logout";
+
+    button.classList.remove(
+      "btn-dark"
+    );
+
+    button.classList.add(
+      "btn-green"
+    );
+
+    button.onclick =
+      logoutUser;
+
+  }else{
+
+    button.textContent =
+      "🔐 Login";
+
+    button.classList.remove(
+      "btn-green"
+    );
+
+    button.classList.add(
+      "btn-dark"
+    );
+
+    button.onclick =
+      function(){
+
+        openAuthModal("login");
+
+      };
+
+  }
+
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+async function logoutUser(){
+
+  const {
+    error
+  } =
+  await supabaseClient
+    .auth
+    .signOut();
+
+
+  if(error){
+
+    showToast(
+      "❌ Logout failed: " +
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  showToast(
+    "Logged out successfully."
+  );
+
+
+  updateAuthButton();
+
+}
+
+
+/* =========================================================
+   CLOSE MODALS OUTSIDE
    ========================================================= */
 
 document
@@ -1387,6 +1886,22 @@ document
   );
 
 
+document
+  .getElementById("authModal")
+  .addEventListener(
+    "click",
+    function(e){
+
+      if(e.target === this){
+
+        closeAuthModal();
+
+      }
+
+    }
+  );
+
+
 /* =========================================================
    TOAST
    ========================================================= */
@@ -1396,7 +1911,8 @@ function showToast(message){
   const toast =
     document.getElementById("toast");
 
-  toast.textContent = message;
+  toast.textContent =
+    message;
 
   toast.classList.add("show");
 
@@ -1481,9 +1997,7 @@ async function loadBusinesses(){
 
     grid.innerHTML = `
       <div class="empty">
-
         Unable to load businesses.
-
       </div>
     `;
 
@@ -1571,7 +2085,6 @@ function renderBusinesses(){
   const filtered =
     businesses.filter(
       function(b){
-
 
         const categoryMatch =
           currentCategory === "All" ||
@@ -1665,9 +2178,6 @@ function renderBusinesses(){
 
 function createBusinessCard(b){
 
-
-  /* ---------- LOGO ---------- */
-
   const logoHTML =
     b.logo
 
@@ -1690,16 +2200,6 @@ function createBusinessCard(b){
       `🏢`;
 
 
-  /* =======================================================
-     PHONE NUMBER
-     =======================================================
-
-     The actual phone number is NEVER printed
-     inside the business card.
-
-     It is only used behind the Call / WhatsApp buttons.
-  */
-
   const phoneClean =
     (b.phone || "")
       .replace(
@@ -1719,8 +2219,6 @@ function createBusinessCard(b){
   let actions = "";
 
 
-  /* ---------- CALL ---------- */
-
   if(phoneClean){
 
     actions += `
@@ -1737,8 +2235,6 @@ function createBusinessCard(b){
 
   }
 
-
-  /* ---------- WHATSAPP ---------- */
 
   if(whatsappNumber){
 
@@ -1759,8 +2255,6 @@ function createBusinessCard(b){
   }
 
 
-  /* ---------- WEBSITE / SOCIAL ---------- */
-
   if(b.link){
 
     let website =
@@ -1768,12 +2262,8 @@ function createBusinessCard(b){
 
 
     if(
-      !website.startsWith(
-        "http://"
-      ) &&
-      !website.startsWith(
-        "https://"
-      )
+      !website.startsWith("http://") &&
+      !website.startsWith("https://")
     ){
 
       website =
@@ -1800,8 +2290,6 @@ function createBusinessCard(b){
   }
 
 
-  /* ---------- NO CONTACT ---------- */
-
   if(!actions){
 
     actions = `
@@ -1822,14 +2310,9 @@ function createBusinessCard(b){
   }
 
 
-  /* =======================================================
-     CARD
-     ======================================================= */
-
   return `
 
     <article class="card">
-
 
       ${
         b.featured
@@ -1837,39 +2320,28 @@ function createBusinessCard(b){
         ?
 
         `
-
           <div class="badge">
-
             FEATURED
-
           </div>
-
         `
 
         :
 
         ""
-
       }
 
 
       <div class="card-top">
 
-
         <div class="icon">
-
           ${logoHTML}
-
         </div>
 
 
         <div>
 
-
           <div class="business-title">
-
             ${escapeHTML(b.name)}
-
           </div>
 
 
@@ -1888,9 +2360,7 @@ function createBusinessCard(b){
 
           </div>
 
-
         </div>
-
 
       </div>
 
@@ -1934,11 +2404,8 @@ document
         "click",
         function(){
 
-
           document
-            .querySelectorAll(
-              ".filter"
-            )
+            .querySelectorAll(".filter")
             .forEach(
               function(btn){
 
@@ -1973,13 +2440,10 @@ document
    ========================================================= */
 
 document
-  .getElementById(
-    "searchInput"
-  )
+  .getElementById("searchInput")
   .addEventListener(
     "input",
     function(){
-
 
       searchTerm =
         this.value
@@ -1998,13 +2462,10 @@ document
    ========================================================= */
 
 document
-  .getElementById(
-    "businessLogo"
-  )
+  .getElementById("businessLogo")
   .addEventListener(
     "change",
     function(){
-
 
       const file =
         this.files[0];
@@ -2035,11 +2496,7 @@ document
       }
 
 
-      if(
-        !file.type.startsWith(
-          "image/"
-        )
-      ){
+      if(!file.type.startsWith("image/")){
 
         alert(
           "Please select a valid image file."
@@ -2048,10 +2505,8 @@ document
 
         this.value = "";
 
-
         preview.style.display =
           "none";
-
 
         return;
 
@@ -2068,16 +2523,13 @@ document
           previewImage.src =
             e.target.result;
 
-
           preview.style.display =
             "block";
 
         };
 
 
-      reader.readAsDataURL(
-        file
-      );
+      reader.readAsDataURL(file);
 
     }
   );
@@ -2088,13 +2540,10 @@ document
    ========================================================= */
 
 document
-  .getElementById(
-    "businessForm"
-  )
+  .getElementById("businessForm")
   .addEventListener(
     "submit",
     async function(e){
-
 
       e.preventDefault();
 
@@ -2110,7 +2559,7 @@ document
 
 
       /* ===================================================
-         CHECK AUTH
+         AUTH CHECK
          =================================================== */
 
       const {
@@ -2125,10 +2574,13 @@ document
 
       if(!session){
 
-        alert(
-          "Please login first. You must be logged in to submit a business."
+        showToast(
+          "🔐 Please login first."
         );
 
+        closeModal();
+
+        openAuthModal("login");
 
         return;
 
@@ -2140,57 +2592,43 @@ document
          =================================================== */
 
       const businessName =
-        form.elements[
-          "business"
-        ]
-        .value
-        .trim();
+        form.elements["business"]
+          .value
+          .trim();
 
 
       const category =
-        form.elements[
-          "category"
-        ]
-        .value;
+        form.elements["category"]
+          .value;
 
 
       const cityArea =
-        form.elements[
-          "location"
-        ]
-        .value
-        .trim();
+        form.elements["location"]
+          .value
+          .trim();
 
 
       const phone =
-        form.elements[
-          "phone"
-        ]
-        .value
-        .trim();
+        form.elements["phone"]
+          .value
+          .trim();
 
 
       const websiteSocial =
-        form.elements[
-          "link"
-        ]
-        .value
-        .trim();
+        form.elements["link"]
+          .value
+          .trim();
 
 
       const description =
-        form.elements[
-          "description"
-        ]
-        .value
-        .trim();
+        form.elements["description"]
+          .value
+          .trim();
 
 
       const logoFile =
         document
-          .getElementById(
-            "businessLogo"
-          )
+          .getElementById("businessLogo")
           .files[0];
 
 
@@ -2233,10 +2671,8 @@ document
 
       try{
 
-
         submitButton.disabled =
           true;
-
 
         submitButton.textContent =
           "Uploading...";
@@ -2252,11 +2688,8 @@ document
 
         if(logoFile){
 
-
           if(
-            !logoFile.type.startsWith(
-              "image/"
-            )
+            !logoFile.type.startsWith("image/")
           ){
 
             throw new Error(
@@ -2276,10 +2709,7 @@ document
           const random =
             Math.random()
               .toString(36)
-              .substring(
-                2,
-                10
-              );
+              .substring(2,10);
 
 
           const fileName =
@@ -2301,21 +2731,14 @@ document
           } =
           await supabaseClient
             .storage
-            .from(
-              "business-logos"
-            )
+            .from("business-logos")
             .upload(
               filePath,
               logoFile,
               {
-                cacheControl:
-                  "3600",
-
-                upsert:
-                  false,
-
-                contentType:
-                  logoFile.type
+                cacheControl:"3600",
+                upsert:false,
+                contentType:logoFile.type
               }
             );
 
@@ -2327,7 +2750,6 @@ document
               uploadError
             );
 
-
             throw new Error(
               "Logo upload failed: " +
               uploadError.message
@@ -2336,19 +2758,13 @@ document
           }
 
 
-          /* ---------------------------------------------
-             GET PUBLIC URL
-             --------------------------------------------- */
-
           const {
             data:
             publicData
           } =
           supabaseClient
             .storage
-            .from(
-              "business-logos"
-            )
+            .from("business-logos")
             .getPublicUrl(
               filePath
             );
@@ -2400,20 +2816,12 @@ document
         };
 
 
-        console.log(
-          "Business data:",
-          businessData
-        );
-
-
         const {
           error:
           insertError
         } =
         await supabaseClient
-          .from(
-            "Businesses"
-          )
+          .from("Businesses")
           .insert([
             businessData
           ]);
@@ -2425,7 +2833,6 @@ document
             "Business insert error:",
             insertError
           );
-
 
           throw new Error(
             insertError.message
@@ -2452,17 +2859,13 @@ document
 
 
         document
-          .getElementById(
-            "logoPreview"
-          )
+          .getElementById("logoPreview")
           .style.display =
           "none";
 
 
         document
-          .getElementById(
-            "logoPreviewImage"
-          )
+          .getElementById("logoPreviewImage")
           .src =
           "";
 
@@ -2474,7 +2877,6 @@ document
 
 
       }catch(error){
-
 
         console.error(
           "Submission error:",
@@ -2490,14 +2892,11 @@ document
 
       }finally{
 
-
         submitButton.disabled =
           false;
 
-
         submitButton.textContent =
           "Submit Business";
-
 
       }
 
@@ -2525,6 +2924,9 @@ supabaseClient
           : "Logged out"
       );
 
+
+      updateAuthButton();
+
     }
   );
 
@@ -2532,6 +2934,8 @@ supabaseClient
 /* =========================================================
    INITIAL LOAD
    ========================================================= */
+
+updateAuthButton();
 
 loadBusinesses();
 
